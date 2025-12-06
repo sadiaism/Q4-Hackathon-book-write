@@ -1,55 +1,68 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+<!--
+Version change: 0.0.0 → 1.0.0
+List of modified principles:
+- PROJECT_NAME: Textbook for Teaching Physical AI & Humanoid Robotics Course
+- PRINCIPLE_1_NAME: Accuracy
+- PRINCIPLE_2_NAME: Clarity
+- PRINCIPLE_3_NAME: Modularity
+- PRINCIPLE_4_NAME: Reproducibility
+- PRINCIPLE_5_NAME: Engagement
+- SECTION_2_NAME: Key Standards and Constraints
+- SECTION_3_NAME: Success Criteria
+- GOVERNANCE_RULES: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan; All PRs/reviews must verify compliance; Complexity must be justified; Use CLAUDE.md for runtime development guidance.
+Added sections: None
+Removed sections: None
+Templates requiring updates:
+- .specify/templates/plan-template.md: ⚠ pending
+- .specify/templates/spec-template.md: ⚠ pending
+- .specify/templates/tasks-template.md: ⚠ pending
+- .specify/templates/commands/*.md: ⚠ pending
+Follow-up TODOs: None
+-->
+# Textbook for Teaching Physical AI & Humanoid Robotics Course Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### Accuracy
+All content must be factually correct and consistent with AI, robotics, and software development principles.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### Clarity
+Writing should be understandable to a technical audience (developers, AI researchers, and robotics engineers).
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### Modularity
+Content should be structured in reusable components, aligning with Spec-Kit Plus conventions.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### Reproducibility
+Examples, code snippets, and tutorials should be verifiable and executable.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### Engagement
+Material should be practical, actionable, and readable, not just theoretical.
 
-### [PRINCIPLE_6_NAME]
+## Key Standards and Constraints
 
+### Key Standards
+- All factual claims must be traceable to authoritative sources (academic papers, official documentation, or recognized technical blogs).
+- Citation format: APA style.
+- Source types: minimum 40% peer-reviewed articles or official documentation.
+- Plagiarism check: 0% tolerance.
+- Writing clarity: Flesch-Kincaid grade 10-12.
+- Code examples must follow best practices (clean, commented, and executable).
 
-[PRINCIPLE__DESCRIPTION]
+### Constraints
+- Word count: 5,000–8,000 words per chapter (flexible depending on content depth).
+- Minimum 15 sources for the entire book.
+- Format: Markdown (for Spec-Kit Plus ingestion), later deployable via Docusaurus to GitHub Pages.
+- Each chapter must include: introduction, key concepts, code examples, and summary.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Success Criteria
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- All claims and examples verified against authoritative sources.
+- Zero plagiarism detected.
+- All code examples tested and functional.
+- Book deployable on GitHub Pages via Docusaurus without errors.
+- Content aligns with Spec-Kit Plus modular structure and Claude Code generation standards.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
+Constitution supersedes all other practices; Amendments require documentation, approval, migration plan; All PRs/reviews must verify compliance; Complexity must be justified; Use CLAUDE.md for runtime development guidance.
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-12-04 | **Last Amended**: 2025-12-04
