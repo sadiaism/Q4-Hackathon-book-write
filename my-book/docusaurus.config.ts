@@ -6,7 +6,7 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 const config: Config = {
   title: 'Physical AI & Humanoid Robotics Textbook',
-  tagline: 'Dinosaurs are cool',
+  tagline: 'A comprehensive journey into intelligent machines, bridging artificial intelligence with real-world robotics.Learn how cyber-physical systems, sensors, control, and cognition shape the future of human–robot collaboration.',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -77,7 +77,7 @@ const config: Config = {
     navbar: {
       title: 'Physical AI & Humanoid Robotics Textbook',
       logo: {
-        alt: 'My Site Logo',
+        alt: 'Book Logo',
         src: 'img/logo.svg',
       },
       items: [
@@ -102,7 +102,7 @@ const config: Config = {
           title: 'Docs',
           items: [
             {
-              label: 'Tutorial',
+              label: 'Book',
               to: '/docs/intro',
             },
           ],
