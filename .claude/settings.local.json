@@ -1,7 +1,9 @@
 {
   "permissions": {
     "allow": [
-      "Bash(powershell.exe:*)"
+      "Bash(powershell.exe:*)",
+      "Bash(dir backend)",
+      "Bash(dir D:hackathone1my-booksrccomponents)"
     ],
     "deny": [],
     "ask": []
