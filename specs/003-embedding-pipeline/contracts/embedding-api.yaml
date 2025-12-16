@@ -1,0 +1,114 @@
+# This file defines the API contracts for the embedding pipeline
+# Since the implementation is in a single main.py file with functions rather than an API,
+# this serves as documentation of the function interfaces
+
+openapi: 3.0.0
+info:
+  title: Embedding Pipeline Functions
+  version: 1.0.0
+  description: Function interfaces for the Docusaurus embedding pipeline
+
+components:
+  schemas:
+    Document:
+      type: object
+      properties:
+        url:
+          type: string
+          description: Source URL of the document
+        title:
+          type: string
+          description: Title extracted from the document
+        content:
+          type: string
+          description: Clean text content extracted from the document
+
+    Embedding:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the embedding
+        vector:
+          type: array
+          items:
+            type: number
+          description: The embedding vector (1024 dimensions for Cohere)
+        text_chunk:
+          type: string
+          description: The text that was embedded
+        document_url:
+          type: string
+          description: Source document URL
+        chunk_index:
+          type: integer
+          description: Position of chunk within the original document
+
+paths:
+  # This represents the function interfaces in main.py
+  /functions/get_all_urls:
+    get:
+      summary: Get all URLs from a base Docusaurus site
+      parameters:
+        - name: base_url
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of URLs found on the site
+
+  /functions/extract_text_from_url:
+    post:
+      summary: Extract clean text from a single URL
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+      responses:
+        '200':
+          description: Document object with extracted text
+
+  /functions/chunk_text:
+    post:
+      summary: Split text into overlapping chunks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                chunk_size:
+                  type: integer
+                overlap:
+                  type: integer
+      responses:
+        '200':
+          description: Array of text chunks
+
+  /functions/embed:
+    post:
+      summary: Generate embeddings for text chunks
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                texts:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Array of embedding vectors

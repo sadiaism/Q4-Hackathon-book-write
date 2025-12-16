@@ -1,0 +1,147 @@
+# This file defines the API contracts for the retrieval testing framework
+# Since this is primarily a testing framework, it defines the interfaces for validation
+
+openapi: 3.0.0
+info:
+  title: Retrieval Testing Framework
+  version: 1.0.0
+  description: API contracts for RAG retrieval validation framework
+
+components:
+  schemas:
+    RetrievalQuery:
+      type: object
+      required:
+        - query_text
+      properties:
+        query_text:
+          type: string
+          description: The text to search for in the vector database
+        top_k:
+          type: integer
+          description: Number of top matches to retrieve
+          default: 5
+          minimum: 1
+          maximum: 100
+
+    RetrievedChunk:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Qdrant point ID
+        text:
+          type: string
+          description: The retrieved text content
+        score:
+          type: number
+          format: float
+          description: Similarity score from Qdrant
+        url:
+          type: string
+          description: Source URL from metadata
+        chunk_id:
+          type: integer
+          description: Chunk index from metadata
+
+    ValidationResult:
+      type: object
+      properties:
+        is_accurate:
+          type: boolean
+          description: Whether the retrieval was accurate
+        content_matches:
+          type: boolean
+          description: Whether retrieved content matches original
+        metadata_correct:
+          type: boolean
+          description: Whether metadata is correct
+        accuracy_score:
+          type: number
+          format: float
+          description: Quantitative measure of accuracy
+
+    TestExecutionResult:
+      type: object
+      properties:
+        query:
+          $ref: '#/components/schemas/RetrievalQuery'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RetrievedChunk'
+        validation:
+          $ref: '#/components/schemas/ValidationResult'
+        execution_time:
+          type: number
+          format: float
+          description: Time taken to execute the test in seconds
+
+paths:
+  /test/basic-retrieval:
+    post:
+      summary: Test basic retrieval functionality
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievalQuery'
+      responses:
+        '200':
+          description: Basic retrieval test result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestExecutionResult'
+
+  /test/content-accuracy:
+    post:
+      summary: Test content accuracy validation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievalQuery'
+      responses:
+        '200':
+          description: Content accuracy test result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestExecutionResult'
+
+  /test/metadata-validation:
+    post:
+      summary: Test metadata validation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievalQuery'
+      responses:
+        '200':
+          description: Metadata validation test result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestExecutionResult'
+
+  /test/end-to-end:
+    post:
+      summary: End-to-end retrieval test
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RetrievalQuery'
+      responses:
+        '200':
+          description: End-to-end test result with clean JSON output
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TestExecutionResult'

@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  title: RAG Agent API
+  version: 1.0.0
+  description: API for the Retrieval-Augmented Generation Agent
+servers:
+  - url: http://localhost:8000
+    description: Local development server
+paths:
+  /ask:
+    post:
+      summary: Submit a query to the RAG Agent
+      description: Process a natural language query and return an answer with sources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QueryRequest'
+      responses:
+        '200':
+          description: Successful response with answer and sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseObject'
+        '400':
+          description: Bad request - invalid or missing query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorObject'
+components:
+  schemas:
+    QueryRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: The natural language question to be answered
+          example: "What is retrieval-augmented generation?"
+        metadata:
+          type: object
+          description: Additional context or parameters for the query
+          example: {}
+    ResponseObject:
+      type: object
+      required:
+        - answer
+        - sources
+        - matched_chunks
+      properties:
+        answer:
+          type: string
+          description: The generated answer to the user's query
+          example: "Retrieval-augmented generation (RAG) is a technique that combines..."
+        sources:
+          type: array
+          items:
+            type: string
+          description: List of sources used to generate the answer
+          example: ["source1.pdf", "source2.docx"]
+        matched_chunks:
+          type: array
+          items:
+            $ref: '#/components/schemas/RetrievedChunk'
+          description: The text chunks used to generate the answer
+        query_id:
+          type: string
+          description: Identifier for tracking the query
+          example: "query-12345"
+    RetrievedChunk:
+      type: object
+      required:
+        - content
+        - source
+      properties:
+        content:
+          type: string
+          description: Text content from the knowledge base
+          example: "RAG combines retrieval and generation models to improve accuracy..."
+        source:
+          type: string
+          description: Source identifier for the content
+          example: "source1.pdf"
+        score:
+          type: number
+          format: float
+          description: Similarity score to the query
+          example: 0.85
+        metadata:
+          type: object
+          description: Additional information about the chunk
+          example: {}
+    ErrorObject:
+      type: object
+      required:
+        - error_code
+        - message
+      properties:
+        error_code:
+          type: string
+          description: Code identifying the type of error
+          example: "INVALID_QUERY"
+        message:
+          type: string
+          description: Human-readable error message
+          example: "Query cannot be empty"
+        details:
+          type: object
+          description: Additional error details
+          example: {}

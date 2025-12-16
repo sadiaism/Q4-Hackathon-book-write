@@ -3,7 +3,8 @@
     "allow": [
       "Bash(powershell.exe:*)",
       "Bash(dir backend)",
-      "Bash(dir D:hackathone1my-booksrccomponents)"
+      "Bash(dir D:hackathone1my-booksrccomponents)",
+      "Bash(python -m pytest tests/test_rag_agent.py -v)"
     ],
     "deny": [],
     "ask": []
