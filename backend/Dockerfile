@@ -15,7 +15,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy the application code
 COPY . /app
 
-EXPOSE $PORT
+# Expose the port (will be overridden by deployment platform)
+EXPOSE 8000
 
-# Run the application with Railway-specific port
+# Run the application with dynamic port support
 CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]

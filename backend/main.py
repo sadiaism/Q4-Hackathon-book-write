@@ -29,18 +29,33 @@ app = FastAPI(
 # Add CORS middleware to allow requests from the frontend
 # For production, specify your GitHub Pages URL
 frontend_url = os.getenv("FRONTEND_URL", "https://sadiaism.github.io")
+additional_origins_str = os.getenv("ADDITIONAL_CORS_ORIGINS", "")
+additional_origins = [origin.strip() for origin in additional_origins_str.split(",") if origin.strip()]
+
+# Build the list of allowed origins
+allowed_origins = [
+    frontend_url,                    # Your GitHub Pages URL
+    "http://localhost:3000",         # Local development (Docusaurus default)
+    "http://localhost:8000",         # Local backend testing
+    "http://127.0.0.1:3000",         # Alternative local development
+    "http://127.0.0.1:8000",         # Alternative local backend
+    "https://sadiaism.github.io",    # GitHub Pages (explicit)
+    "https://*.github.io",           # GitHub Pages subdomains (if needed)
+]
+
+# Add any additional origins from environment variables
+allowed_origins.extend(additional_origins)
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        frontend_url,           # Your GitHub Pages URL
-        "http://localhost:3000", # Local development
-        "http://localhost:8000", # Local backend testing
-        "http://127.0.0.1:3000",
-        "http://127.0.0.1:8000",
-    ],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    # Allow credentials to be included in cross-origin requests
+    allow_credentials=True,
+    # Expose headers that can be accessed by the frontend
+    expose_headers=["Access-Control-Allow-Origin"]
 )
 
 # Include the ask endpoint router
