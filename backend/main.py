@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.ask_endpoint import router as ask_router
 from src.utils.config_validator import ConfigValidator
-
+import os
 # Load environment variables
 load_dotenv()
 
@@ -27,9 +27,17 @@ app = FastAPI(
 )
 
 # Add CORS middleware to allow requests from the frontend
+# For production, specify your GitHub Pages URL
+frontend_url = os.getenv("FRONTEND_URL", "https://sadiaism.github.io")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # In production, replace with specific origins
+    allow_origins=[
+        frontend_url,           # Your GitHub Pages URL
+        "http://localhost:3000", # Local development
+        "http://localhost:8000", # Local backend testing
+        "http://127.0.0.1:3000",
+        "http://127.0.0.1:8000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
