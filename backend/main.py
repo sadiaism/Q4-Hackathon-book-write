@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from src.api.ask_endpoint import router as ask_router
 from src.utils.config_validator import ConfigValidator
 import os
+
 # Load environment variables
 load_dotenv()
 
@@ -52,8 +53,6 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    # Allow credentials to be included in cross-origin requests
-    allow_credentials=True,
     # Expose headers that can be accessed by the frontend
     expose_headers=["Access-Control-Allow-Origin"]
 )

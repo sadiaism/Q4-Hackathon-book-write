@@ -35,7 +35,7 @@ class RAGAgentService:
 
         # Initialize the generative model
         try:
-            self.model = genai.GenerativeModel('gemini-pro')
+            self.model = genai.GenerativeModel('gemini-2.5-flash')
         except Exception as e:
             logger.error(f"Failed to initialize Gemini model: {e}")
             raise
@@ -114,6 +114,9 @@ class RAGAgentService:
             # Prepare context from matched chunks
             context = "\n\n".join([f"Source: {chunk.source}\nContent: {chunk.content}" for chunk in matched_chunks])
 
+            logger.info(f"Context length: {len(context)} characters")
+            logger.info(f"Number of chunks: {len(matched_chunks)}")
+
             # Create prompt for the generative model
             prompt = f"""
             Based on the following context, please answer the question. If the context doesn't contain enough information to answer the question, please say so.
@@ -126,8 +129,12 @@ class RAGAgentService:
             Answer:
             """
 
+            logger.info(f"Prompt length: {len(prompt)} characters")
+
             # Generate content using the Gemini model
             response = self.model.generate_content(prompt)
+
+            logger.info(f"Raw response received: {response}")
 
             # Extract the text from the response
             answer = response.text if response.text else "I couldn't find a relevant answer based on the provided context."
@@ -137,6 +144,9 @@ class RAGAgentService:
 
         except Exception as e:
             logger.error(f"Error generating answer: {e}")
+            logger.error(f"Exception type: {type(e).__name__}")
+            import traceback
+            logger.error(f"Full traceback: {traceback.format_exc()}")
             return "Sorry, I encountered an error while generating the answer."
 
     def validate_query(self, query_request: QueryRequest) -> bool:
