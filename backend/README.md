@@ -109,3 +109,30 @@ The testing framework will:
 - For large sites, you may need to adjust the `max_pages` parameter to avoid excessive crawling
 - Make sure your Qdrant instance is running if using a local installation
 - Verify that the `rag_embedding` collection exists before running retrieval tests
+
+## Hugging Face Space Configuration
+
+If you want to deploy this as a Hugging Face Space using Docker, use the following Space configuration:
+
+title: "RAG Agent API"
+emoji: ðŸ¤—
+colorFrom: blue
+colorTo: red
+sdk: docker
+pinned: false
+license: mit
+---
+
+### Environment Variables for Space Secrets
+
+- `GEMINI_API_KEY`: Your Google Gemini API key
+- `COHERE_API_KEY`: Your Cohere API key
+- `QDRANT_URL`: Your Qdrant database URL
+- `QDRANT_API_KEY`: Your Qdrant API key
+- `FRONTEND_URL`: Your frontend URL
+
+### API Endpoints
+
+- `/` - Root endpoint
+- `/health` - Health check endpoint
+- `/ask` - Main endpoint for asking questions to the RAG agent
