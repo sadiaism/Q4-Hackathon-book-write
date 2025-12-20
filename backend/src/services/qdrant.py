@@ -114,3 +114,145 @@ class QdrantService:
         except Exception as e:
             logger.error(f"Error retrieving records by IDs from Qdrant: {e}")
             raise
+
+    def upsert_vectors(self, texts: List[str], urls: List[str], metadata_list: Optional[List[dict]] = None, ids: Optional[List[str]] = None) -> bool:
+        """
+        Upsert (add/update) vectors to the Qdrant collection.
+
+        Args:
+            texts: List of text chunks to embed and store
+            urls: List of URLs corresponding to each text chunk
+            metadata_list: Optional list of metadata dictionaries for each text chunk
+            ids: Optional list of IDs for the vectors (if not provided, Qdrant will generate them)
+
+        Returns:
+            True if upsert operation was successful
+        """
+        logger.info(f"Upserting {len(texts)} vectors to collection: {self.collection_name}")
+
+        try:
+            # Generate IDs if not provided
+            if ids is None:
+                import uuid
+                ids = [str(uuid.uuid4()) for _ in range(len(texts))]
+
+            # Prepare payloads
+            payloads = []
+            for i, text in enumerate(texts):
+                payload = {
+                    "text": text,
+                    "url": urls[i] if i < len(urls) else "",
+                    "chunk_index": i
+                }
+
+                # Add additional metadata if provided
+                if metadata_list and i < len(metadata_list):
+                    payload.update(metadata_list[i])
+
+                payloads.append(payload)
+
+            # Upsert to Qdrant
+            self.client.upsert(
+                collection_name=self.collection_name,
+                points=models.Batch(
+                    ids=ids,
+                    vectors=[None] * len(texts),  # Vectors will be populated by embedding service
+                    payloads=payloads
+                )
+            )
+
+            logger.info(f"Successfully upserted {len(texts)} vectors to collection: {self.collection_name}")
+            return True
+
+        except Exception as e:
+            logger.error(f"Error upserting vectors to Qdrant: {e}")
+            raise
+
+    def update_vectors(self, embeddings: List[List[float]], ids: List[str]) -> bool:
+        """
+        Update the vector embeddings for existing points in the Qdrant collection.
+
+        Args:
+            embeddings: List of embedding vectors to update
+            ids: List of IDs corresponding to the vectors to update
+
+        Returns:
+            True if update operation was successful
+        """
+        logger.info(f"Updating {len(embeddings)} vectors in collection: {self.collection_name}")
+
+        try:
+            # Update vectors in Qdrant
+            self.client.update_vectors(
+                collection_name=self.collection_name,
+                points_updates=[
+                    models.PointVectors(
+                        id=ids[i],
+                        vector=embeddings[i]
+                    )
+                    for i in range(len(embeddings))
+                ]
+            )
+
+            logger.info(f"Successfully updated {len(embeddings)} vectors in collection: {self.collection_name}")
+            return True
+
+        except Exception as e:
+            logger.error(f"Error updating vectors in Qdrant: {e}")
+            raise
+
+    def get_all_points_count(self) -> int:
+        """
+        Get the total number of points in the collection.
+
+        Returns:
+            Total number of points in the collection
+        """
+        try:
+            collection_info = self.client.get_collection(self.collection_name)
+            return collection_info.points_count
+        except Exception as e:
+            logger.error(f"Error getting collection info: {e}")
+            return 0
+
+    def search_with_payload_filter(self, query_vector: List[float], filter_payload: dict = None, limit: int = 5) -> List[models.ScoredPoint]:
+        """
+        Search for similar vectors in the Qdrant collection with payload filtering.
+
+        Args:
+            query_vector: The query vector to search for
+            filter_payload: Optional payload filter to narrow down search
+            limit: Maximum number of results to return
+
+        Returns:
+            List of scored points (matches)
+        """
+        logger.info(f"Searching for similar vectors in collection: {self.collection_name} with filter")
+
+        try:
+            search_filter = None
+            if filter_payload:
+                conditions = []
+                for key, value in filter_payload.items():
+                    conditions.append(models.FieldCondition(
+                        key=key,
+                        match=models.MatchValue(value=value)
+                    ))
+                if conditions:
+                    search_filter = models.Filter(must=conditions)
+
+            results = self.client.search(
+                collection_name=self.collection_name,
+                query_vector=query_vector,
+                query_filter=search_filter,
+                limit=limit
+            )
+
+            logger.info(f"Found {len(results)} similar vectors with filter")
+            return results
+
+        except Exception as e:
+            logger.error(f"Error searching in Qdrant with filter: {e}")
+            raise
+
+    

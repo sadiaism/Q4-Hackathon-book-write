@@ -4,6 +4,8 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+const isProd = process.env.NODE_ENV === 'production';
+
 const config: Config = {
   title: 'Physical AI & Humanoid Robotics Textbook',
   tagline: 'A comprehensive journey into intelligent machines, bridging artificial intelligence with real-world robotics.Learn how cyber-physical systems, sensors, control, and cognition shape the future of human–robot collaboration.',
@@ -18,8 +20,8 @@ const config: Config = {
   url: 'https://sadiaism.github.io',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
- 
-  baseUrl: '/Q4-Hackathon-book-write/',
+
+  baseUrl:'/Q4-Hackathon-book-write/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.

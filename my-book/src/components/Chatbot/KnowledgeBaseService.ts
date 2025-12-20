@@ -15,12 +15,16 @@ interface BackendResponse {
 class KnowledgeBaseService {
   private backendUrl: string;
 
+  // constructor() {
+  //   // Use environment-based configuration for backend URL
+  //   this.backendUrl = typeof window !== 'undefined'
+  //     ? (process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000')
+  //     : 'http://localhost:8000';
+  // }
+
   constructor() {
-    // Use environment-based configuration for backend URL
-    this.backendUrl = typeof window !== 'undefined'
-      ? (process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000')
-      : 'http://localhost:8000';
-  }
+  this.backendUrl = 'http://localhost:8000';  // or your deployed backend URL
+}
 
   // Call the backend to get an answer based on the query
   async getAnswer(query: string): Promise<string> {
