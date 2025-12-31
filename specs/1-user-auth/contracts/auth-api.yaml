@@ -1,0 +1,123 @@
+openapi: 3.0.0
+info:
+  title: Authentication and Profile API
+  version: 1.0.0
+  description: API for user authentication and profile management
+
+paths:
+  /api/profile:
+    post:
+      summary: Save user profile data after onboarding
+      description: Creates or updates the user's profile with their software and hardware background information
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserProfileInput'
+      responses:
+        '200':
+          description: Profile saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '400':
+          description: Invalid input data
+        '401':
+          description: Unauthorized - user not authenticated
+        '409':
+          description: Conflict - profile already exists and belongs to another user
+      security:
+        - bearerAuth: []
+
+  /api/profile/me:
+    get:
+      summary: Get current user's profile
+      description: Fetches the authenticated user's profile information
+      responses:
+        '200':
+          description: Profile retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserProfile'
+        '401':
+          description: Unauthorized - user not authenticated
+        '404':
+          description: Profile not found
+      security:
+        - bearerAuth: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+  schemas:
+    UserProfileInput:
+      type: object
+      required:
+        - programmingLevel
+        - languages
+        - tools
+        - ram
+        - processor
+        - gpu
+        - learningGoal
+      properties:
+        programmingLevel:
+          type: string
+          enum: [beginner, intermediate, advanced, expert]
+          description: User's programming level
+        languages:
+          type: array
+          items:
+            type: string
+          description: Programming languages the user knows
+          maxItems: 20
+        tools:
+          type: array
+          items:
+            type: string
+          description: Tools the user uses
+          maxItems: 20
+        ram:
+          type: string
+          description: Laptop RAM (e.g., "8GB", "16GB", "32GB")
+        processor:
+          type: string
+          description: Laptop processor (e.g., "Intel i5", "AMD Ryzen 7")
+        gpu:
+          type: string
+          description: Laptop GPU (e.g., "Integrated", "RTX 3060")
+        learningGoal:
+          type: string
+          description: User's learning goal
+          maxLength: 500
+
+    UserProfile:
+      allOf:
+        - $ref: '#/components/schemas/UserProfileInput'
+        - type: object
+          properties:
+            id:
+              type: string
+              description: Profile ID
+            userId:
+              type: string
+              description: Associated user ID
+            completed:
+              type: boolean
+              description: Whether onboarding is complete
+              default: false
+            createdAt:
+              type: string
+              format: date-time
+              description: Profile creation timestamp
+            updatedAt:
+              type: string
+              format: date-time
+              description: Profile last update timestamp

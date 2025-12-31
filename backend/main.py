@@ -4,6 +4,7 @@ import logging
 from fastapi.middleware.cors import CORSMiddleware
 
 from src.api.ask_endpoint import router as ask_router
+from src.api.auth_endpoint import router as auth_router
 from src.utils.config_validator import ConfigValidator
 import os
 
@@ -59,6 +60,9 @@ app.add_middleware(
 
 # Include the ask endpoint router
 app.include_router(ask_router, prefix="", tags=["ask"])
+
+# Include the auth endpoint router
+app.include_router(auth_router, prefix="", tags=["auth"])
 
 @app.get("/")
 async def root():

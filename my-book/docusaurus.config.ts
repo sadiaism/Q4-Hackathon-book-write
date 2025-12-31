@@ -11,6 +11,11 @@ const config: Config = {
   tagline: 'A comprehensive journey into intelligent machines, bridging artificial intelligence with real-world robotics.Learn how cyber-physical systems, sensors, control, and cognition shape the future of human–robot collaboration.',
   favicon: 'img/favicon.ico',
 
+  // Custom fields for runtime access
+  customFields: {
+    apiUrl: process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000',
+  },
+
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
   future: {
     v4: true, // Improve compatibility with the upcoming Docusaurus v4
@@ -95,6 +100,16 @@ const config: Config = {
           href: 'https://github.com/facebook/docusaurus',
           label: 'GitHub',
           position: 'right',
+        },
+        {
+          type:  'custom-AuthNavbarItem',
+          position: 'right',
+          items:[
+            {
+              to:'/auth/signin',
+              label:'Sign in',
+            }
+          ]
         },
       ],
     },
