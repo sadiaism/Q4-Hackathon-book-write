@@ -27,6 +27,8 @@ const AuthNavbarItem = (props) => {
     checkAuth();
 
     // Listen for storage events to handle auth changes across tabs
+    if (typeof window === 'undefined') return;
+
     const handleStorageChange = (e) => {
       if (e.key === 'authToken') {
         checkAuth();
@@ -42,6 +44,7 @@ const AuthNavbarItem = (props) => {
 
   const handleSignOut = (e) => {
     e.preventDefault();
+    if (typeof window === 'undefined') return;
     // Remove auth token without page refresh
     removeAuthToken();
     // Update state immediately
@@ -186,13 +189,15 @@ const AuthModalInline = ({ mode, onClose, onAuthSuccess }) => {
         throw new Error(data.detail || data.message || 'Authentication failed');
       }
 
-      localStorage.setItem('authToken', data.access_token || data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
-      window.dispatchEvent(new Event('storage'));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('authToken', data.access_token || data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        window.dispatchEvent(new Event('storage'));
+      }
 
       onAuthSuccess();
 
-      if (formMode === 'signin') {
+      if (formMode === 'signin' && typeof window !== 'undefined') {
         window.location.href = '/dashboard';
       }
     } catch (err) {

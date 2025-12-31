@@ -5,6 +5,7 @@
  * @returns {string|null} The auth token or null if not found
  */
 export function getAuthToken() {
+  if (typeof window === 'undefined') return null;
   return localStorage.getItem('authToken');
 }
 
@@ -13,6 +14,7 @@ export function getAuthToken() {
  * @param {string} token - The auth token to store
  */
 export function setAuthToken(token) {
+  if (typeof window === 'undefined') return;
   localStorage.setItem('authToken', token);
 }
 
@@ -20,6 +22,7 @@ export function setAuthToken(token) {
  * Remove the authentication token from localStorage
  */
 export function removeAuthToken() {
+  if (typeof window === 'undefined') return;
   localStorage.removeItem('authToken');
   localStorage.removeItem('user');
 }
@@ -29,6 +32,7 @@ export function removeAuthToken() {
  * @returns {Object|null} The user object or null if not found
  */
 export function getCurrentUser() {
+  if (typeof window === 'undefined') return null;
   const userStr = localStorage.getItem('user');
   if (userStr) {
     try {
@@ -104,6 +108,7 @@ export async function authenticatedFetch(endpoint, options = {}) {
  * Sign out the current user
  */
 export function signOut() {
+  if (typeof window === 'undefined') return;
   removeAuthToken();
   // Optionally redirect to home or sign-in page
   window.location.href = '/';

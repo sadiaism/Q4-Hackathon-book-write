@@ -6,12 +6,15 @@ import ProfileEditor from '../components/onboarding/profile-editor';
 
 export default function DashboardPage() {
   const [profile, setProfile] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const history = useHistory();
-  const user = getCurrentUser();
 
   useEffect(() => {
+    const currentUser = getCurrentUser();
+    setUser(currentUser);
+
     const token = getAuthToken();
     if (!token) {
       history.push('/auth/signin');

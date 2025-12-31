@@ -25,6 +25,8 @@ export const AuthProvider = ({ children }) => {
     setLoading(false);
 
     // Listen for storage events to handle auth changes across tabs
+    if (typeof window === 'undefined') return;
+
     const handleStorageChange = (e) => {
       if (e.key === 'authToken') {
         const token = localStorage.getItem('authToken');
@@ -49,11 +51,13 @@ export const AuthProvider = ({ children }) => {
     loading,
     isAuthenticated: !!user,
     login: (userData, token) => {
+      if (typeof window === 'undefined') return;
       localStorage.setItem('authToken', token);
       localStorage.setItem('user', JSON.stringify(userData));
       setUser(userData);
     },
     logout: () => {
+      if (typeof window === 'undefined') return;
       localStorage.removeItem('authToken');
       localStorage.removeItem('user');
       setUser(null);
